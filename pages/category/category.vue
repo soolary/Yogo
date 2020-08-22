@@ -3,13 +3,26 @@
 		<SearchLink></SearchLink>
 		<view class="content">
 			<view class="left">
-				 <view class="cate1 active" >大家电</view>
-				 <view class="cate1" v-for="(cate1,index) in 20" :key="index">
-				 	热门推荐
+				 <!-- <view class="cate1 active" >大家电</view> -->
+				 <view class="cate1" :class="{active:index===curIndex}" v-for="(cate1,index) in categoryList" :key="index" @click="curIndex=index">
+				 	{{cate1.cat_name}}
 				 </view>
 			</view>
 			<view class="right"> 
-				
+				<image src="/static/images/titleImage.png" mode=""></image>
+				<view class="cate2" v-for="(cate2,index2) in categoryList[curIndex].children" :key="index2">
+					<view class="title">
+						<text>{{cate2.cat_name}}</text>
+					</view>
+					<view class="cate3-wrapper">
+						<view class="cate3" v-for="(cate3,index3) in cate2.children" :key="index3">
+							<image :src="cate3.cat_icon" mode=""></image>
+							<view class="">
+								{{cate3.cat_name}}
+							</view>
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -20,6 +33,20 @@
 	export default {
 		components:{
 			SearchLink
+		},
+		data(){
+			return {
+				curIndex:0,
+				categoryList:[]
+			}
+		},
+		onLoad(){
+			this.getCateList()
+		},
+		methods:{
+			async getCateList(){
+				this.categoryList=await this.$request({url:'/api/public/v1/categories'})
+			}
 		}
 	}
 </script>
@@ -60,7 +87,39 @@
 		}
 	}
 	.right {
-		
+		flex: 1;
+		padding: 20rpx 16rpx 0;
+		overflow: scroll;
+		>image {
+			width: 520rpx;
+			height: 180rpx;
+		}
+		.cate2 {
+			margin-bottom: 40rpx;
+			.title {
+				text-align: center;
+				color: #e0e0e0;
+				height: 110rpx;
+				line-height: 110rpx;
+				text {
+					color: #333;
+					margin: 0 30rpx;
+				}
+			}
+		}
+		.cate3-wrapper {
+			display:flex;
+			flex-wrap: wrap;
+			.cate3 {
+				width: 33.33%;
+				text-align: center;
+				margin-bottom: 20rpx;
+				image {
+					width: 120rpx;
+					height: 120rpx;
+				}
+			}
+		}
 	}
 }
 </style>
