@@ -1,26 +1,36 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-	{
+		{
 			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "yogo"
 			}
-			},{
-				"path": "pages/category/category",
+		}, {
+			"path": "pages/category/category",
 			"style": {
 				"navigationBarTitleText": "分类"
 			}
-				},{
-					"path": "pages/cart/cart",
+		}, {
+			"path": "pages/cart/cart",
 			"style": {
 				"navigationBarTitleText": "购物车"
 			}
-			},{	
-				"path": "pages/me/me",
+		}, {
+			"path": "pages/me/me",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
+		}, {
+			"path": "pages/search_list/search_list",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"enablePullDownRefresh" :true,
+				"backgroundColor":"#ccc",
+				"backgroundTextStyle":"dark",
+				"onReachBottomDistance":50
+				
 			}
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -28,31 +38,29 @@
 		"navigationBarBackgroundColor": "#eb4450",
 		"backgroundColor": "#f4f4f4"
 	},
-	"tabBar":{
-		"color":"#333",
-		"selectedColor":"#eb4450",
-		"list":[
-			{
-			"pagePath":"pages/home/home",
-			"text":"首页",
-			"iconPath":"static/tabs/icon_home@3x.png",
-			"selectedIconPath":"static/tabs/icon_home_active@3x.png"
-		},{
-			"pagePath":"pages/category/category",
-			"text":"分类",
-			"iconPath":"static/tabs/icon_category@3x.png",
-			"selectedIconPath":"static/tabs/icon_category_active@3x.png"
-		},{
-			"pagePath":"pages/cart/cart",
-			"text":"购物车",
-			"iconPath":"static/tabs/icon_cart@3x.png",
-			"selectedIconPath":"static/tabs/icon_cart_active@3x.png"
-		},{
-			"pagePath":"pages/me/me",
-			"text":"我的",
-			"iconPath":"static/tabs/icon_me@3x.png",
-			"selectedIconPath":"static/tabs/icon_me_active@3x.png"
-		}
-		]
+	"tabBar": {
+		"color": "#333",
+		"selectedColor": "#eb4450",
+		"list": [{
+			"pagePath": "pages/home/home",
+			"text": "首页",
+			"iconPath": "static/tabs/icon_home@3x.png",
+			"selectedIconPath": "static/tabs/icon_home_active@3x.png"
+		}, {
+			"pagePath": "pages/category/category",
+			"text": "分类",
+			"iconPath": "static/tabs/icon_category@3x.png",
+			"selectedIconPath": "static/tabs/icon_category_active@3x.png"
+		}, {
+			"pagePath": "pages/cart/cart",
+			"text": "购物车",
+			"iconPath": "static/tabs/icon_cart@3x.png",
+			"selectedIconPath": "static/tabs/icon_cart_active@3x.png"
+		}, {
+			"pagePath": "pages/me/me",
+			"text": "我的",
+			"iconPath": "static/tabs/icon_me@3x.png",
+			"selectedIconPath": "static/tabs/icon_me_active@3x.png"
+		}]
 	}
 }

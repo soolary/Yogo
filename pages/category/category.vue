@@ -1,7 +1,7 @@
 <template>
 	<view class="">
 		<SearchLink></SearchLink>
-		<view class="content">
+		<view class="content" v-if="categoryList[curIndex]">
 			<view class="left">
 				<!-- <view class="cate1 active" >大家电</view> -->
 				<view class="cate1" :class="{active:index===curIndex}" v-for="(cate1,index) in categoryList" :key="index" @click="selectCate1(index)">
@@ -16,7 +16,7 @@
 							<text>{{cate2.cat_name}}</text>
 						</view>
 						<view class="cate3-wrapper">
-							<view class="cate3" v-for="(cate3,index3) in cate2.children" :key="index3">
+							<view class="cate3" v-for="(cate3,index3) in cate2.children" :key="index3" @click="toSearchList(cate3.cat_name)">
 								<image :src="cate3.cat_icon" mode=""></image>
 								<view class="">
 									{{cate3.cat_name}}
@@ -48,15 +48,25 @@
 			this.getCateList()
 		},
 		methods: {
+			// 点击跳转到具体品类列表页
+			toSearchList(catName){
+				// console.log(123)
+				uni.navigateTo({
+					url:'/pages/search_list/search_list?catName='+catName
+				})
+			},
+			// 获取分类数据
 			async getCateList() {
 				this.categoryList = await this.$request({
 					url: '/api/public/v1/categories'
 				})
 			},
+			// 滚动值存储
 				scroll(e){
 				// console.log(e)
 				this.oldScrollTop = e.detail.scrollTop
 			},
+			// 滚动复位
 			selectCate1(index){
 				this.scrollTop=this.oldScrollTop
 				this.$nextTick(()=>{
