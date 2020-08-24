@@ -11,7 +11,7 @@
 			<view>销量</view>
 			<view>价格</view>
 		</view>
-		<view class="goods-list">
+		<view class="goods-list" :style="{marginTop:isScroll?'static':'fixed'}">
 			<view class="goods" v-for="(item,index) in goodsList" :key="index">
 				<image :src="item.goods_small_logo" mode=""></image>
 				<view class="right">
@@ -24,6 +24,7 @@
 				</view>
 			</view>
 		</view>
+		<view class="btm-line" v-show="isDown">----到底啦----</view>
 	</view>
 </template>
 
@@ -35,8 +36,10 @@
 			return {
 				goodsList: [], // 商品数据
 				catName: '', // 接口请求参数
-				pageNum: 1,
-				isFall: false
+				pageNum: 1, // 页码
+				isDown: false, // 到底了吗
+				isRequseting:false, // 是否请求中
+				isScroll:false // 你拉了吗
 			}
 		},
 		onLoad(options) {
@@ -47,6 +50,10 @@
 		methods: {
 			// 获取数据
 			async queryGoodsList() {
+				if(this.isRequseting){
+					return
+				}
+				this.isRequseting=true
 				let data = await this.$request({
 					url: '/api/public/v1/goods/search',
 					data: {
@@ -57,9 +64,10 @@
 				})
 				console.log(data.goods)
 				uni.stopPullDownRefresh();
+				this.isRequseting=false
 				this.goodsList = [...this.goodsList, ...data.goods]
 				if (data.total <= this.goodsList.length) {
-					this.isFall = true
+					this.isDown = true
 				}
 			},
 			// 搜索商品
@@ -67,63 +75,40 @@
 				this.pageNum = 1
 				this.goodsList = []
 				this.queryGoodsList()
+				this.isDown = false
 			}
+		},
+		// 上拉事件
+		onPageScroll{
+			this.isScroll=true
 		},
 		// 下拉刷新
 		onPullDownRefresh() {
 			this.search()
-			this.isFall=false
+			this.isDown=false
+			this.isScroll=false
 		},
 		// 到底了
 		onReachBottom() {
-			if (!this.isFall) {
+			if (!this.isDown) {
 				this.pageNum++
 				this.queryGoodsList()
 			}
 			// this.goodsList.push(...data)
-
 		}
 	}
 </script>
 
 <style lang="less" scoped>
-	.header {
-		height: 120rpx;
-		padding: 30rpx 16rpx;
-		box-sizing: border-box;
-		background-color: #eee;
-		position: relative;
-
-		icon {
-			position: absolute;
-			top: 48rpx;
-			left: 44rpx;
-		}
-
-		input {
-			height: 60rpx;
-			width: 100%;
-			border-radius: 4rpx;
-			background-color: #fff;
-			padding-left: 80rpx;
-			box-sizing: border-box;
-		}
-	}
-
-	.top-header {
-		position: sticky;
-		top: 0;
-		left: 0;
-		right: 0;
-		background-color: #fff;
-	}
+	
 
 	.header {
 		height: 120rpx;
+		width: 100%;
 		padding: 30rpx 16rpx;
 		box-sizing: border-box;
 		background-color: #eee;
-		position: relative;
+		position: fixed;
 
 		icon {
 			position: absolute;
@@ -142,6 +127,7 @@
 	}
 
 	.filter-menu {
+		padding-top: 120rpx;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;

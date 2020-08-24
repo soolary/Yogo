@@ -1,5 +1,6 @@
 function request(options) {
-	const BASE_URL="https://api-ugo-dev.itheima.net"
+	// const BASE_URL="https://api-ugo-dev.itheima.net"
+	const BASE_URL="https://www.uinav.com"
 	return new Promise((resolve, reject) => {
 		uni.showLoading({
 			mask:false,
