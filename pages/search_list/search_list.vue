@@ -14,7 +14,7 @@
 			</view>
 		</view>
 		<view class="goods-list" >
-			<view class="goods" v-for="(item,index) in goodsList" :key="index" @click="toDetail">
+			<view class="goods" v-for="(item,index) in goodsList" :key="index" @click="toDetail(item.goods_id)">
 				<image :src="item.goods_small_logo" mode=""></image>
 				<view class="right">
 					<view class="good-name text-line2">
@@ -100,9 +100,10 @@
 				this.queryGoodsList()
 				this.isDown = false
 			},
-			toDetail(){
+			toDetail(id){
+				console.log(id)
 				wx.navigateTo({
-					url:"/pages/goodDetail/goodDetail"
+					url:"/pages/goodDetail/goodDetail?goodsId="+id
 				})
 			}
 		}
