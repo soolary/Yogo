@@ -1,14 +1,21 @@
-function request(options) {
-	// const BASE_URL="https://api-ugo-dev.itheima.net"
-	const BASE_URL="https://www.uinav.com"
+const BASE_URL = "https://api-ugo-dev.itheima.net"
+
+function request({
+	url,
+	data,
+	showLoading = true
+}) {
+	// const BASE_URL="https://www.uinav.com"
 	return new Promise((resolve, reject) => {
-		uni.showLoading({
-			mask:false,
-			title:'乌拉'
-		})
+		if (showLoading) {
+			uni.showLoading({
+				mask: false,
+				title: '乌拉'
+			})
+		}
 		uni.request({
-			url: BASE_URL+options.url,
-			data:options.data,
+			url: BASE_URL + url,
+			data: data,
 			success: res => {
 				let {
 					meta,
@@ -24,4 +31,6 @@ function request(options) {
 		})
 	})
 }
-export {request}
+export {
+	request
+}

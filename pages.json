@@ -24,11 +24,16 @@
 			"path": "pages/search_list/search_list",
 			"style": {
 				"navigationBarTitleText": "搜索",
-				"enablePullDownRefresh" :true,
-				"backgroundColor":"#ccc",
-				"backgroundTextStyle":"dark",
-				"onReachBottomDistance":50
-				
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#ccc",
+				"backgroundTextStyle": "dark",
+				"onReachBottomDistance": 50
+
+			}
+		}, {
+			"path": "pages/goodDetail/goodDetail",
+			"style": {
+				"navigationBarTitleText": "商品详情"
 			}
 		}
 	],
