@@ -1,10 +1,7 @@
 <template>
 	<view>
 		<view class="top-header" >
-			<view class="header">
-				<icon type="search" size="16" color="#bbb"></icon>
-				<input type="text" v-model="catName" confirm-type="search" @confirm="search" />
-			</view>
+			<SearchBar @search="search" :catName="catName"></SearchBar>
 			<view class="filter-menu">
 				<view class="active">
 					综合
@@ -31,6 +28,7 @@
 </template>
 
 <script>
+import SearchBar from '@/components/SearchBar.vue'
 	// 设定一个固定的每页数据量
 	const PAGE_SIZE = 6
 	export default {
@@ -43,6 +41,9 @@
 				// isRequseting: false, // 是否请求中
 				isScroll: false // 你拉了吗
 			}
+		},
+		components:{
+			SearchBar
 		},
 		onLoad(options) {
 			this.pageNum=1

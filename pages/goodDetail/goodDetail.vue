@@ -2,7 +2,7 @@
 	<view class="wrapper">
 
 		<swiper class="swiper" indicator-dots autoplay circular indicator-color="#ccc" indicator-active-color="#fff">
-			<block v-for="(item, index) in goodInfo.pics" :key="index" >
+			<block v-for="(item, index) in goodInfo.pics" :key="index">
 				<swiper-item>
 					<image class="swiper-img" :src="item.pics_big" @click="showImg(index)"></image>
 				</swiper-item>
@@ -14,8 +14,11 @@
 			<view class="name-favo">
 				<view class="name">{{goodInfo.goods_name}}</view>
 				<view class=favo>
-					<text class="iconfont iconstar"></text>
-					<text>收藏</text>
+					<text class="iconfont iconshare"></text>
+					<text>分享</text>
+					<button open-type="share">
+						分享
+					</button>
 				</view>
 			</view>
 			<view class="express">快递: 免运费</view>
@@ -37,7 +40,7 @@
 				<text>规格参数</text>
 			</view>
 			<view class="main">
-				<view>图文介绍</view>
+				<view v-html="goodInfo.goods_introduce"></view>
 				<view v-show="false">商品参数</view>
 			</view>
 		</view>
@@ -45,6 +48,7 @@
 			<view class="icon-text">
 				<text class="iconfont iconkefu"></text>
 				<text>联系客服</text>
+				<button open-type="contact">客服</button>
 			</view>
 			<view class="icon-text">
 				<text class="iconfont iconicon4"></text>
@@ -61,27 +65,35 @@
 		data() {
 			return {
 				goodInfo: '',
-				goodImages:[]
+				goodImages: []
 			}
 		},
 		onLoad(options) {
 			// console.log(options)
-			this.getGoodDetail(options.goodsId) 
+			this.getGoodDetail(options.goodsId)
+		},
+		// 分享
+		onShareAppMessage() {
+			return {
+				title: '一拳一个嘤嘤怪',
+				path: '',
+				imageUrl: 'http://soolar.oss-cn-hangzhou.aliyuncs.com/0.jpg'
+			}
 		},
 		methods: {
 			// 获取商品信息
 			async getGoodDetail(id) {
 				this.goodInfo = await this.$request({
-					url: '/api/public/v1/goods/detail?goods_id='+id,
+					url: '/api/public/v1/goods/detail?goods_id=' + id,
 				})
 				console.log(this.goodInfo)
 			},
 			// 预览图片
-			showImg(index){
-				this.goodImages=this.goodInfo.pics.map(item=>item.pics_big)
+			showImg(index) {
+				this.goodImages = this.goodInfo.pics.map(item => item.pics_big)
 				uni.previewImage({
-					current:index,
-					urls:this.goodImages
+					current: index,
+					urls: this.goodImages
 				})
 			}
 		}
@@ -141,6 +153,11 @@
 				flex-direction: column;
 				align-items: center;
 				position: relative;
+
+				button {
+					position: absolute;
+					opacity: 0;
+				}
 			}
 		}
 
@@ -223,6 +240,11 @@
 			align-items: center;
 			justify-content: center;
 			position: relative;
+
+			button {
+				position: absolute;
+				opacity: 0;
+			}
 		}
 
 		.btn {
