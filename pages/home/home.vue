@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<SearchLink></SearchLink>
+		<SearchLink ></SearchLink>
 		<swiper :indicator-dots="true" indicator-active-color="#fff" indicator-color="rgba(255,255,255,.3)" :autoplay="true"
 		 :interval="3000" :duration="1000">
 			<swiper-item v-for="item in swiperdata" :key="index">

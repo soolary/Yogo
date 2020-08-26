@@ -1,5 +1,5 @@
 <template>
-	<view class="search-link">
+	<view class="search-link" @click="toSearch">
 		<view class="inner">
 			<icon class="icon" type="search" size="16"></icon>
 			<text>搜索</text>
@@ -8,6 +8,15 @@
 </template>
 
 <script>
+	export default {
+		methods:{
+			toSearch(){
+				wx.navigateTo({
+					url: "/pages/search/search"
+				})
+			}
+		}
+	}
 </script>
 
 <style lang="less" scoped>
@@ -16,7 +25,7 @@
 		background-color: #eb4450;
 		padding: 20rpx 16rpx;
 		box-sizing: border-box;
-	
+
 		.inner {
 			display: flex;
 			height: 60rpx;
@@ -24,9 +33,11 @@
 			border-radius: 8rpx;
 			justify-content: center;
 			align-items: center;
+
 			icon {
 				margin-top: 4rpx;
 			}
+
 			text {
 				margin-left: 16px;
 				color: #bbb;

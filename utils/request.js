@@ -21,7 +21,7 @@ function request({
 					meta,
 					message
 				} = res.data
-				if (meta.status !== 200) {
+				if (meta.status === 200) {
 					resolve(message)
 				}
 			},

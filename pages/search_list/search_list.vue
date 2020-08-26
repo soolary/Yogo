@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="top-header" >
+		<view class="top-header">
 			<SearchBar @search="search" :catName="catName"></SearchBar>
 			<view class="filter-menu">
 				<view class="active">
@@ -10,7 +10,7 @@
 				<view>价格</view>
 			</view>
 		</view>
-		<view class="goods-list" >
+		<view class="goods-list">
 			<view class="goods" v-for="(item,index) in goodsList" :key="index" @click="toDetail(item.goods_id)">
 				<image :src="item.goods_small_logo" mode=""></image>
 				<view class="right">
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import SearchBar from '@/components/SearchBar.vue'
+	import SearchBar from '@/components/SearchBar.vue'
 	// 设定一个固定的每页数据量
 	const PAGE_SIZE = 6
 	export default {
@@ -42,24 +42,24 @@ import SearchBar from '@/components/SearchBar.vue'
 				isScroll: false // 你拉了吗
 			}
 		},
-		components:{
+		components: {
 			SearchBar
 		},
 		onLoad(options) {
-			this.pageNum=1
-			this.isRequseting=false
+			this.pageNum = 1
+			this.isRequseting = false
 			console.log(options)
 			this.catName = options.catName
 			this.queryGoodsList()
 		},
-		
+
 		// 上拉事件
 		onPageScroll() {
 			this.isScroll = true
 		},
 		// 下拉刷新
 		onPullDownRefresh() {
-			this.search()
+			this.reload()
 			this.isScroll = false
 		},
 		// 到底了
@@ -84,9 +84,9 @@ import SearchBar from '@/components/SearchBar.vue'
 						pagenum: this.pageNum,
 						pagesize: PAGE_SIZE
 					},
-					showLoading:false
+					showLoading: false
 				})
-				console.log(data.goods)
+				
 				uni.stopPullDownRefresh();
 				this.isRequseting = false
 				this.goodsList = [...this.goodsList, ...data.goods]
@@ -95,16 +95,21 @@ import SearchBar from '@/components/SearchBar.vue'
 				}
 			},
 			// 搜索商品
-			search() {
-				this.pageNum = 1
-				this.goodsList = []
-				this.queryGoodsList()
-				this.isDown = false
+			search(inputVal) {
+				this.catName=inputVal
+				this.reload()
 			},
-			toDetail(id){
+			reload(){
+				 this.pageNum = 1
+				 this.goodsList = []
+				 this.queryGoodsList()
+				 this.isDown = false
+				 
+			},
+			toDetail(id) {
 				console.log(id)
 				wx.navigateTo({
-					url:"/pages/goodDetail/goodDetail?goodsId="+id
+					url: "/pages/goodDetail/goodDetail?goodsId=" + id
 				})
 			}
 		}
@@ -144,21 +149,22 @@ import SearchBar from '@/components/SearchBar.vue'
 		}
 
 
-			.filter-menu {
-				// padding-top: 120rpx;
-				display: flex;
-				justify-content: space-around;
-				align-items: center;
-				height: 100rpx;
+		.filter-menu {
+			// padding-top: 120rpx;
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			height: 100rpx;
 
-				view.active {
-					color: #eb4450;
-				}
+			view.active {
+				color: #eb4450;
 			}
 		}
+	}
 
-		.goods-list {
-			// margin-top: 220rpx;
+	.goods-list {
+
+		// margin-top: 220rpx;
 		.goods {
 			border-top: 1rpx solid #ddd;
 			height: 260rpx;
