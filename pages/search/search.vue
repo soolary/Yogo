@@ -4,7 +4,7 @@
 		<view class="history-search">
 			<view class="title">
 				<text class="title">历史搜索</text>
-				<icon type="clear" size="18">
+				<icon type="clear" size="18" @click="clearHistory">
 				</icon>
 			</view>
 			<view>
@@ -40,6 +40,23 @@
 			// 换下顺序在跳转
 			relocate(inputVal){
 				this.$refs.search.confirmSearch(inputVal)
+			},
+			clearHistory(){
+				uni,uni.showModal({
+					title: '提示',
+					content: '你要清空咩',
+					showCancel: true,
+					cancelText: '不删了',
+					confirmText: '删他丫的',
+					success: res => {
+						if(res.confirm){
+							this.history=[]
+							uni.clearStorageSync(HISTORY_KEY)
+						}
+					},
+					fail: () => {},
+					complete: () => {}
+				});
 			}
 		}
 	}

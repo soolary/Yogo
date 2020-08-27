@@ -2,7 +2,7 @@
 	<view class="searchBar">
 		<input type="text" @confirm="confirmSearch(inputVal)" confirm-type="search" v-model.trim="inputVal" />
 		<icon class="search-icon" type="search" size="16"></icon>
-		<icon class="clear-icon" type="clear" size="16" color="#fff" v-show="inputVal" @click="inputVal=''"></icon>
+		<icon class="clear-icon" type="clear" size="16" color="#ccc" v-if="inputVal" @click="inputVal=''"></icon>
 	</view>
 </template>
 
@@ -23,7 +23,7 @@
 			confirmSearch(inputVal) {
 				if (inputVal) { 
 					//获取历史
-					let history=uni.getStorageSync('history')
+					let history=uni.getStorageSync('history')||[]
 					//加个历史
 					history.unshift(inputVal)
 					// 去重

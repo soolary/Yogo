@@ -51,6 +51,7 @@
 			console.log(options)
 			this.catName = options.catName
 			this.queryGoodsList()
+			this.addHistory(this.catName)
 		},
 
 		// 上拉事件
@@ -96,7 +97,7 @@
 			},
 			// 搜索商品
 			search(inputVal) {
-				this.catName=inputVal
+				this.catName=inputVal 
 				this.reload()
 			},
 			reload(){
@@ -104,7 +105,17 @@
 				 this.goodsList = []
 				 this.queryGoodsList()
 				 this.isDown = false
-				 
+			},
+			addHistory(inputVal){
+				let history=uni.getStorageSync('history')
+				//加个历史
+				history.unshift(inputVal)
+				// 去重
+				history=[...new Set(history)]
+				//多6就删最后一个
+				history.length > 6 && history.pop()
+				//在存进去+去重
+				uni.setStorageSync('history',history)
 			},
 			toDetail(id) {
 				console.log(id)

@@ -6,17 +6,21 @@
 		</view>
 		<!-- 商品列表 -->
 		<view class="goods-list">
-			<view class="goods-item" v-for="(item, index) in 3" :key="index">
-				<text class="iconfont icon-checked"></text>
-				<image src="http://image1.suning.cn/uimg/b2c/newcatentries/0070134290-000000000149003877_1_400x400.jpg" alt="" />
+			<view class="goods-item" v-for="(item, index) in cartList" :key="index" @click="toItem(item.goodsId)">
+				<text class="iconfont" :class="item.check?'iconchecked':'iconunchecked'" @click="toggleCheck(item)"></text>
+				<image :src="item.goods_small_logo" alt="" />
 				<view class="right">
-					<text class="text-line2">spike 经典武士大马士革直刀(微型) 户外野营直刀 收藏礼品刀 饰品刀具</text>
+					<text class="text-line2">{{item.goods_name}}</text>
 					<view class="btm">
-						<text class="price">￥<text>100</text>.00</text>
+						<text class="price">
+							￥
+							<text>{{item.goods_price}}</text>
+							.00
+						</text>
 						<view class="goods-num">
-							<button>-</button>
-							<text>100</text>
-							<button>+</button>
+							<button @click.stop="discrease(item)">-</button>
+							<text>{{item.num}}</text>
+							<button @click.stop="plus(item)">+</button>
 						</view>
 					</view>
 				</view>
@@ -26,17 +30,75 @@
 			<view class="select-all">
 				<text class="iconfont icon-unchecked"></text>
 				<text>全选</text>
-				<view class="price-wrapper">
-					<view class="price">
-						<view>合计:<text class="num">￥100.00</text></view>
-						<text class="info">包含运费</text>
+			</view>
+			<view class="price-wrapper">
+				<view class="price">
+					<view>
+						合计:
+						<text class="num">￥100.00</text>
 					</view>
-					<view class="account-btn">结算(3)</view>
+					<text class="info">包含运费</text>
 				</view>
 			</view>
+			<view class="account-btn">结算(3)</view>
 		</view>
 	</view>
 </template>
+<script>
+	const CART_KEY = 'cart'
+	export default {
+		data() {
+			return {
+				cartList: []
+			}
+		},
+		onShow() {
+			// 本地存的购物车信息
+			this.cartListLocal = uni.getStorageSync(CART_KEY) || []
+			// 调用接口
+			this.getCartList()
+		},
+		methods: {
+			async getCartList() {
+				// 本地购物车的ID数组
+				let cartListId = this.cartListLocal.map(item => item.goodsId)
+				// 转换成字符串
+				let IDArr = cartListId.join(',')
+				// 获取到服务器的购物车信息
+				let cartListServer = await this.$request({
+					url: '/api/public/v1/goods/goodslist?goods_ids=' + IDArr
+				})
+				this.cartList = this.cartListLocal.map(item => {
+					let goodInfo = cartListServer.find(item2 => {
+						// 找出相同的商品
+						return item2.goods_id === item.goodsId
+					})
+					return { ...item,
+						...goodInfo
+					}
+				})
+			},
+			toItem(id) {
+				uni.navigateTo({
+					url: '/pages/goodDetail/goodDetail?goodsId=' + id
+				})
+			},
+			toggleCheck(item) {
+				item.check = !item.check
+			},
+			discrease(item) {
+				if (item.num <= 1) {
+					item.num = 1
+				} else {
+					item.num--
+				}
+			},
+			plus(item) {
+				item.num++
+			}
+		}
+	}
+</script>
 
 <style lang="less">
 	.iconfont {
@@ -77,6 +139,14 @@
 			display: flex;
 			flex-direction: column;
 			margin: 0 20rpx 0 18rpx;
+
+			.text-line2 {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+			}
 
 			.btm {
 				display: flex;
@@ -153,6 +223,7 @@
 			flex: 1;
 			display: flex;
 			align-items: center;
+
 			.price-wrapper {
 				display: flex;
 				flex: 1;

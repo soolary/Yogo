@@ -50,17 +50,18 @@
 				<text>联系客服</text>
 				<button open-type="contact">客服</button>
 			</view>
-			<view class="icon-text">
+			<view class="icon-text" @click="toCart">
 				<text class="iconfont iconicon4"></text>
 				<text>购物车</text>
 			</view>
-			<view class="btn add-cart-btn">加入购物车</view>
+			<view class="btn add-cart-btn" @click="add2Cart">加入购物车</view>
 			<view class="btn buy-btn">立即购买</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	const CART_KEY = 'cart'
 	export default {
 		data() {
 			return {
@@ -94,6 +95,46 @@
 				uni.previewImage({
 					current: index,
 					urls: this.goodImages
+				})
+			},
+			add2Cart() {
+				// 对象方式
+				// const cartObj = uni.getStorageSync(CART_KEY) || {}
+				// let goodsId = this.goodInfo.goods_id
+				// cartObj[goodsId] = {
+				// 	checked: true,
+				// 	num: cartObj[goodsId] ? cartObj[goodsId].num + 1 : 1
+				// }
+				// uni.setStorageSync(CART_KEY,cartObj)
+				// uni.showToast({
+				// 	title:'加入购物车成功'
+				// })
+				// 数组方式
+				let cartArr =uni.getStorageSync(CART_KEY) ||[]
+				let goodsId = this.goodInfo.goods_id
+				let good=cartArr.find(item=>{return item.goodsId===goodsId})
+				if(good){
+					// 非第一次，数目加1
+					good.num++
+					// 激活
+					good.check=true
+					// 加到头部
+					cartArr.unshift(good)
+					// 去重
+					cartArr=[...new Set(cartArr)]
+				}else {
+					let newGood={
+						goodsId:goodsId,
+						check:true,
+						num:1
+					}
+					cartArr.unshift(newGood)
+				}
+				uni.setStorageSync(CART_KEY,cartArr)
+			},
+			toCart(){
+				uni.switchTab({
+					url:'/pages/cart/cart'
 				})
 			}
 		}
