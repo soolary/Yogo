@@ -7,7 +7,7 @@
 		<!-- 商品列表 -->
 		<view class="goods-list">
 			<view class="goods-item" v-for="(item, index) in cartList" :key="index" @click="toItem(item.goodsId)">
-				<text class="iconfont" :class="item.check?'iconchecked':'iconunchecked'" @click="toggleCheck(item)"></text>
+				<text class="iconfont" :class="item.check?'iconchecked':'iconunchecked'" @click.stop="toggleCheck(item)"></text>
 				<image :src="item.goods_small_logo" alt="" />
 				<view class="right">
 					<text class="text-line2">{{item.goods_name}}</text>
@@ -28,19 +28,19 @@
 		</view>
 		<view class="account">
 			<view class="select-all">
-				<text class="iconfont icon-unchecked"></text>
+				<text class="iconfont" :class="selectAll?'iconchecked':'iconunchecked'" @click="toggleAll"></text>
 				<text>全选</text>
 			</view>
 			<view class="price-wrapper">
 				<view class="price">
 					<view>
 						合计:
-						<text class="num">￥100.00</text>
+						<text class="num">￥{{totalPrice}}.00</text>
 					</view>
 					<text class="info">包含运费</text>
 				</view>
 			</view>
-			<view class="account-btn">结算(3)</view>
+			<view class="account-btn" @click="toPay">结算({{totalNum}})</view>
 		</view>
 	</view>
 </template>
@@ -58,6 +58,10 @@
 			// 调用接口
 			this.getCartList()
 		},
+		onHide() {
+			uni.setStorageSync(CART_KEY, this.cartList)
+		},
+
 		methods: {
 			async getCartList() {
 				// 本地购物车的ID数组
@@ -83,18 +87,73 @@
 					url: '/pages/goodDetail/goodDetail?goodsId=' + id
 				})
 			},
+			toPay() {
+				uni.navigateTo({
+					url: '/pages/pay/pay'
+				})
+			},
 			toggleCheck(item) {
 				item.check = !item.check
 			},
 			discrease(item) {
 				if (item.num <= 1) {
-					item.num = 1
+					uni.showModal({
+						title: '提示',
+						content: '确定删除此商品吗',
+						success: res => {
+							res.confirm &&
+								this.cartList.splice(item.index, 1)
+						}
+					})
+					return
 				} else {
 					item.num--
 				}
 			},
 			plus(item) {
 				item.num++
+			},
+			toggleAll() {
+				this.selectAll = !this.selectAll
+			}
+		},
+		computed: {
+			totalPrice() {
+				return this.cartList.reduce((sum, item) => {
+					return sum + (item.check ? item.goods_price * item.num : 0)
+				}, 0)
+			},
+			totalNum() {
+				return this.cartList.reduce((sum, item) => {
+					return sum + (item.check ? item.num : 0)
+				}, 0)
+			},
+			selectAll: {
+				get() {
+					return this.cartList.every(item => item.check)
+				},
+				set(status) {
+					console.log(status)
+					this.cartList.forEach((item, index) => {
+						item.check = status
+					})
+				}
+			}
+		},
+		watch: {
+			cartList: {
+				handler() {
+					// console.log(this.cartList)
+					let cart = this.cartList.map(item => {
+						return {
+							goodsId: item.goodsId,
+							check: item.check,
+							num: item.num
+						}
+					})
+					uni.setStorageSync(CART_KEY, cart)
+				},
+				deep: true
 			}
 		}
 	}

@@ -55,7 +55,7 @@
 				<text>购物车</text>
 			</view>
 			<view class="btn add-cart-btn" @click="add2Cart">加入购物车</view>
-			<view class="btn buy-btn">立即购买</view>
+			<view class="btn buy-btn" @click="toPay">立即购买</view>
 		</view>
 	</view>
 </template>
@@ -135,6 +135,11 @@
 			toCart(){
 				uni.switchTab({
 					url:'/pages/cart/cart'
+				})
+			},
+			toPay(){
+				uni.navigateTo({
+					url:'/pages/pay/pay'
 				})
 			}
 		}

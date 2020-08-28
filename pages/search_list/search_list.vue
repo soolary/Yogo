@@ -107,7 +107,7 @@
 				 this.isDown = false
 			},
 			addHistory(inputVal){
-				let history=uni.getStorageSync('history')
+				let history=uni.getStorageSync('history')||[]
 				//加个历史
 				history.unshift(inputVal)
 				// 去重

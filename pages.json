@@ -21,15 +21,11 @@
 				"navigationBarTitleText": "我的"
 			}
 		}, {
-			"path": "pages/search_list/search_list",
+			"path":"pages/login/login",
 			"style": {
-				"navigationBarTitleText": "搜索",
-				"enablePullDownRefresh": true,
-				"backgroundColor": "#ccc",
-				"backgroundTextStyle": "dark",
-				"onReachBottomDistance": 50
-
+				"navigationBarTitleText": "登录"
 			}
+			
 		}, {
 			"path": "pages/goodDetail/goodDetail",
 			"style": {
@@ -39,6 +35,36 @@
 			"path": "pages/search/search",
 			"style": {
 				"navigationBarTitleText": "搜索"
+			}
+		}, {
+			"path":"pages/order/order",
+			"style": {
+				"navigationBarTitleText": "订单列表"
+			}
+		}, {
+			"path":"pages/order_detail/order_detail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		}, {
+			"path":"pages/order_result/order_result",
+			"style": {
+				"navigationBarTitleText": "订单结果"
+			}
+		},{
+			"path": "pages/pay/pay",
+			"style": {
+				"navigationBarTitleText": "支付"
+			}
+		},{
+			"path": "pages/search_list/search_list",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#ccc",
+				"backgroundTextStyle": "dark",
+				"onReachBottomDistance": 50
+
 			}
 		}
 	],
